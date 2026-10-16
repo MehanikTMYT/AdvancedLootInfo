@@ -400,6 +400,7 @@ allprojects {
     }
 
     repositories {
+        mavenLocal() // Fleet: SEMI (EMI) from the local repo
         maven {
             name = 'NeoForge'
             url = 'https://maven.neoforged.net/releases/'

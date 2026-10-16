@@ -52,9 +52,9 @@ public class EmiBlockLoot extends EmiBaseLoot {
         return new LootTableWidget(utils, entry, rect, maxWidth);
     }
 
-    private static ResourceLocation getRecipeId(Block block) {
-        ResourceLocation location = BuiltInRegistries.BLOCK.getKey(block);
+    private static Identifier getRecipeId(Block block) {
+        Identifier location = BuiltInRegistries.BLOCK.getKey(block);
 
-        return ResourceLocation.fromNamespaceAndPath(location.getNamespace(), "blocks/" + location.getPath());
+        return Identifier.fromNamespaceAndPath(location.getNamespace(), "blocks/" + location.getPath());
     }
 }

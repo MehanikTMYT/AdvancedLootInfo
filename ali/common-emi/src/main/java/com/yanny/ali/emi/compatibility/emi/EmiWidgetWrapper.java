@@ -28,7 +28,7 @@ public class EmiWidgetWrapper extends Widget {
     }
 
     @Override
-    public void render(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float v) {
+    public void extractRenderState(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float v) {
         widget.render(guiGraphics, mouseX, mouseY);
     }
 

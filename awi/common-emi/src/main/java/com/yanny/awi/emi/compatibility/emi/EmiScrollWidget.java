@@ -7,7 +7,7 @@ import dev.emi.emi.api.widget.Bounds;
 import dev.emi.emi.api.widget.Widget;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
@@ -24,7 +24,7 @@ public class EmiScrollWidget extends Widget implements IMouseEvents {
         scrollWidget = new AbstractScrollWidget(rect, contentWidth, contentHeight) {
             @NotNull
             @Override
-            protected ResourceLocation getTexture() {
+            protected Identifier getTexture() {
                 return WidgetUtils.TEXTURE_LOC;
             }
 
@@ -37,7 +37,7 @@ public class EmiScrollWidget extends Widget implements IMouseEvents {
                         continue;
                     }
 
-                    widget.render(guiGraphics, (int) mouseX, (int) mouseY, 0);
+                    widget.extractRenderState(guiGraphics, (int) mouseX, (int) mouseY, 0);
                 }
             }
         };
@@ -83,7 +83,7 @@ public class EmiScrollWidget extends Widget implements IMouseEvents {
     }
 
     @Override
-    public void render(GuiGraphicsExtractor draw, int mouseX, int mouseY, float delta) {
+    public void extractRenderState(GuiGraphicsExtractor draw, int mouseX, int mouseY, float delta) {
         scrollWidget.render(draw, mouseX, mouseY);
     }
 

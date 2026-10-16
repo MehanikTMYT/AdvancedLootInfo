@@ -34,8 +34,12 @@ public class MixinRecipeScreen {
         }
     }
 
-    @Inject(at = @At("HEAD"), method = "mouseDragged(DDIDD)Z", cancellable = true)
-    private void ali_onMouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY, CallbackInfoReturnable<Boolean> info) {
+    // Fleet port (26.1): mouseDragged takes a MouseButtonEvent (x, y, button) and the drag deltas
+    @Inject(at = @At("HEAD"), method = "mouseDragged(Lnet/minecraft/client/input/MouseButtonEvent;DD)Z", cancellable = true)
+    private void ali_onMouseDragged(net.minecraft.client.input.MouseButtonEvent event, double deltaX, double deltaY, CallbackInfoReturnable<Boolean> info) {
+        double mouseX = event.x();
+        double mouseY = event.y();
+        int button = event.button();
         for (WidgetGroup widgetGroup : currentPage) {
             double mx = mouseX - widgetGroup.x();
             double my = mouseY - widgetGroup.y();

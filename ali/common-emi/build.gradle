@@ -2,22 +2,14 @@ architectury {
     common(enabled_platforms.split(","))
 }
 
-loom {
-    mixin {
-        useLegacyMixinAp = true
-        defaultRefmapName = "ali.emi.refmap.json"
-    }
-}
-
+// Fleet: rewritten like common-jei for 26.1 (the 1.21.1 loom/refmap settings fail on unobfuscated 26.1); EMI = SEMI.
 dependencies {
     // We depend on fabric loader here to use the fabric @Environment annotations and get the mixin dependencies
     // Do NOT use other classes from fabric loader
-    implementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
     implementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
 
     compileOnly project(path: ":ali:common")
     compileOnly project(path: ":aci:common")
 
-    compileOnlyApi "dev.emi:emi-xplat-intermediary:${emi_version}:api"
-    compileOnlyApi "dev.emi:emi-xplat-intermediary:${emi_version}"
+    compileOnlyApi "dev.emi:emi-neoforge:${emi_version}" // full jar: ALI uses EMI internals (runtime/config/screen)
 }

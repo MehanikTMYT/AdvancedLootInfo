@@ -41,11 +41,8 @@ public class EmiEntityLoot extends EmiBaseLoot {
         this.variant = id;
         this.lootTable = lootTable;
 
-        SpawnEggItem spawnEgg = Services.getPlatform().getSpawnEggItem(entityType);
-
-        if (spawnEgg != null) {
-            catalysts = List.of(EmiStack.of(spawnEgg));
-        }
+        Services.getPlatform().getSpawnEggItem(entityType)
+                .ifPresent(spawnEgg -> catalysts = List.of(EmiStack.of(spawnEgg.value())));
     }
 
     @Override
@@ -72,7 +69,7 @@ public class EmiEntityLoot extends EmiBaseLoot {
                 }
 
                 @Override
-                public void render(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float delta) {
+                public void extractRenderState(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float delta) {
                     Level level = Minecraft.getInstance().level;
 
                     if (level != null) {

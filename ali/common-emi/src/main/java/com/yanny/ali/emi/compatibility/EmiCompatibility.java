@@ -64,6 +64,7 @@ public class EmiCompatibility implements EmiPlugin {
             gameplayCategories.values().forEach(registry::addCategory);
             tradeCategories.values().forEach(registry::addCategory);
 
+            java.util.List<com.yanny.ali.compatibility.common.TradeLootType> trades = new java.util.ArrayList<>();
             GenericUtils.processData(
                     clientRegistry,
                     level.registryAccess(),
@@ -75,9 +76,15 @@ public class EmiCompatibility implements EmiPlugin {
                             addRecipe(registry, entityCategories, entity, (category) -> new EmiEntityLoot(category, location, entity, node, outputs)),
                     (node, location, outputs) ->
                             addRecipe(registry, gameplayCategories, location, (category) -> new EmiGameplayLoot(category, location, node, outputs)),
-                    (trade) ->
-                            addRecipe(registry, tradeCategories, trade.id(), (category) -> new EmiTradeLoot(category, trade))
+                    trades::add
             );
+            // Fleet port (26.1): trader headers measure text (font glyph upload = render thread only). Compute all of
+            // them in ONE render-thread task instead of one blocking hop per recipe, then build the recipes here.
+            EmiTradeLoot.prepareHeaders(trades);
+            for (var trade : trades) {
+                addRecipe(registry, tradeCategories, trade.id(), (category) -> new EmiTradeLoot(category, trade));
+            }
+            EmiTradeLoot.clearHeaders();
         } else {
             LOGGER.warn("EMI integration was not loaded! Level is null!");
         }

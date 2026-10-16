@@ -1,6 +1,6 @@
 package com.yanny.ali.emi.compatibility.emi;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import com.yanny.aci.api.NumberInterval;
 import com.yanny.aci.compatibility.ScrollableTooltip;
 import com.yanny.aci.number.NumberFormatter;
@@ -64,22 +64,22 @@ public class EmiLootSlotWidget extends SlotWidget {
 
         if (option.count != null) {
             Font font = Minecraft.getInstance().font;
-            PoseStack stack = draw.pose();
+            org.joml.Matrix3x2fStack stack = draw.pose();
 
-            stack.pushPose();
+            stack.pushMatrix();
 
             if (option.isRange) {
-                stack.translate(x + 17, y + 13, 200);
-                stack.pushPose();
-                stack.scale(0.5f, 0.5f, 0.5f);
-                draw.drawString(font, option.count, -font.width(option.count), 0, -1, false);
-                stack.popPose();
+                stack.translate(x + 17, y + 13);
+                stack.pushMatrix();
+                stack.scale(0.5f, 0.5f);
+                draw.text(font, option.count, -font.width(option.count), 0, -1, false);
+                stack.popMatrix();
             } else {
-                stack.translate(x + 18, y + 10, 200);
-                draw.drawString(font, option.count, -font.width(option.count), 0, -1, true);
+                stack.translate(x + 18, y + 10);
+                draw.text(font, option.count, -font.width(option.count), 0, -1, true);
             }
 
-            stack.popPose();
+            stack.popMatrix();
         }
 
         super.drawOverlay(draw, mouseX, mouseY, delta);

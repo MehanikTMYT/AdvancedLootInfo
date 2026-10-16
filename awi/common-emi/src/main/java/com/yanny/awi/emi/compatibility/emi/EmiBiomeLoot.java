@@ -15,7 +15,7 @@ import dev.emi.emi.api.widget.SlotWidget;
 import dev.emi.emi.api.widget.TextWidget;
 import dev.emi.emi.api.widget.Widget;
 import dev.emi.emi.api.widget.WidgetHolder;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
@@ -68,7 +68,7 @@ public class EmiBiomeLoot extends EmiBaseLoot {
             } else {
                 widgets.add(new SlotWidget(EmiStack.EMPTY, slot.x(), slot.y()) {
                     @Override
-                    public void drawOverlay(GuiGraphics draw, int mouseX, int mouseY, float delta) {
+                    public void drawOverlay(GuiGraphicsExtractor draw, int mouseX, int mouseY, float delta) {
                         GenericUtils.renderUnknownSpawnEgg(draw, slot.x(), slot.y());
                         super.drawOverlay(draw, mouseX, mouseY, delta);
                     }

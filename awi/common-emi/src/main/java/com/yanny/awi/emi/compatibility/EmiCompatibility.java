@@ -52,7 +52,7 @@ public class EmiCompatibility implements EmiPlugin {
                 registry.addCategory(category);
 
                 for (IDataNode biomeNode : levelNode.nodes()) {
-                    ResourceLocation biomeId = ((BiomeNode) biomeNode).getBiomeId();
+                    Identifier biomeId = ((BiomeNode) biomeNode).getBiomeId();
 
                     try {
                         List<Block> blocks = GenericUtils.collectBlocks(biomeNode);

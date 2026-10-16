@@ -27,7 +27,33 @@ public class EmiTradeLoot extends EmiBaseLoot {
     private final TraderHeader header;
 
     public EmiTradeLoot(EmiRecipeCategory category, TradeLootType type) {
-        this(category, type, GenericUtils.prepareTraderHeader(type, CATEGORY_WIDTH));
+        this(category, type, header(type));
+    }
+
+    // Fleet port (26.1): measuring text bakes font glyphs into a texture, which is only allowed on the render thread,
+    // while EMI builds recipes on its reload worker — compute the header on the render thread and wait for it.
+    private static final java.util.Map<TradeLootType, TraderHeader> HEADERS = new java.util.IdentityHashMap<>();
+
+    public static void prepareHeaders(java.util.List<TradeLootType> trades) {
+        net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
+        Runnable task = () -> trades.forEach(t -> HEADERS.put(t, GenericUtils.prepareTraderHeader(t, CATEGORY_WIDTH)));
+        if (mc.isSameThread()) task.run(); else mc.submit(task).join();
+    }
+
+    public static void clearHeaders() {
+        HEADERS.clear();
+    }
+
+    private static TraderHeader header(TradeLootType type) {
+        TraderHeader cached = HEADERS.get(type);
+        if (cached != null) {
+            return cached;
+        }
+        net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
+        if (mc.isSameThread()) {
+            return GenericUtils.prepareTraderHeader(type, CATEGORY_WIDTH);
+        }
+        return mc.submit(() -> GenericUtils.prepareTraderHeader(type, CATEGORY_WIDTH)).join();
     }
 
     private EmiTradeLoot(EmiRecipeCategory category, TradeLootType type, TraderHeader header) {
