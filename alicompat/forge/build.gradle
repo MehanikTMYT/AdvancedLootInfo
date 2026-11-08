@@ -260,8 +260,7 @@ dependencies {
         runtimeOnly rootProject.project(p).sourceSets.main.output.classesDirs
     }
 
-    modRuntimeOnly "mezz.jei:jei-${minecraft_version}-forge:${jei_version}"
-
+    // синк/порт 26.1.2: modRuntimeOnly JEI удалена — политика EMI-only
     // MoreJS' trade classes extend KubeJS types no shim imports, so nothing else pulls KubeJS in and they fail to load
     modCompileOnly "curse.maven:kubejs-238086:5853326"
 

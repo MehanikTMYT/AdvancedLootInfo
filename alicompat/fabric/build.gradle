@@ -250,8 +250,7 @@ dependencies {
         common(project(path: p)) { transitive false }
     }
 
-    runtimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:${rei_version}"
-
+    // синк/порт 26.1.2: runtimeOnly REI удалена — политика EMI-only
     project.ext.commonProjects.each { p ->
         common(project(path: p)) { transitive false }
         shadowCommon(project(path: p, configuration: "transformProductionFabric")) { transitive false }

@@ -64,16 +64,4 @@ versionRange="${emi_version_range}"
 ordering="AFTER"
 side="BOTH"
 
-[[dependencies.awi]]
-modId="jei"
-mandatory=false
-versionRange="${jei_version_range}"
-ordering="AFTER"
-side="BOTH"
 
-[[dependencies.awi]]
-modId="rei"
-mandatory=false
-versionRange="${rei_version_range}"
-ordering="AFTER"
-side="BOTH"

@@ -9,7 +9,7 @@ architectury {
 }
 
 def platforms = enabled_platforms.split(",")
-def viewers = ["emi", "jei", "rei"]
+def viewers = ["emi"] // синк/порт 26.1.2: jei/rei удалены — политика EMI-only
 
 // Architectury Loom 1.13.466+ remaps a Forge jar statically if any mixin config lacks a refmap, breaking EMI's targets
 def patchEmiForgeMixinConfig = { Project project ->
@@ -110,22 +110,12 @@ subprojects {
                 "emi_version_range"            : emi_version_range,
                 "emi_version_range_fabric"     : emi_version_range_fabric,
 
-                "jei_version"                  : jei_version,
-                "jei_version_range"            : jei_version_range,
-                "jei_version_range_fabric"     : jei_version_range_fabric,
-
-                "rei_version"                  : rei_version,
-                "rei_version_range"            : rei_version_range,
-                "rei_version_range_fabric"     : rei_version_range_fabric,
-                "cloth_config_version"         : cloth_config_version,
-                "architectury_version"         : architectury_version
+                // синк/порт 26.1.2: версии альтернативных просмотрщиков и cloth/architectury удалены — политика EMI-only
         ]
     }
 
     if (platforms.contains(project.name)) {
         def emi_available = emi_enabled == "true" && project.findProperty("${project.name}_emi_enabled") == "true"
-        def jei_available = jei_enabled == "true" && project.findProperty("${project.name}_jei_enabled") == "true"
-        def rei_available = rei_enabled == "true" && project.findProperty("${project.name}_rei_enabled") == "true"
         def lootjs_available = lootjs_enabled == "true" && project.findProperty("${project.name}_lootjs_enabled") == "true"
         def isAci = project.parent.name == "aci"
         def isAliCompat = project.parent.name == "alicompat"
@@ -140,8 +130,6 @@ subprojects {
             project.ext.commonProjects << ":ali:common"
 
             if (emi_available) project.ext.commonProjects << ":ali:common-emi"
-            if (jei_available) project.ext.commonProjects << ":ali:common-jei"
-            if (rei_available) project.ext.commonProjects << ":ali:common-rei"
             if (lootjs_available) project.ext.commonProjects << ":ali:common-lootjs"
 
             loom {
@@ -158,8 +146,6 @@ subprojects {
             project.ext.commonProjects << ":awi:common"
 
             if (emi_available) project.ext.commonProjects << ":awi:common-emi"
-            if (jei_available) project.ext.commonProjects << ":awi:common-jei"
-            if (rei_available) project.ext.commonProjects << ":awi:common-rei"
         } else if (isAliCompat) {
             project.ext.commonProjects << ":alicompat:common"
 
@@ -301,8 +287,6 @@ subprojects {
                 def recipe_viewer = project.findProperty("recipe_viewer")
                 if (!recipe_viewer) {
                     if (emi_available) recipe_viewer = "emi"
-                    else if (jei_available) recipe_viewer = "jei"
-                    else if (rei_available) recipe_viewer = "rei"
                 }
 
                 if (emi_available) {
@@ -312,21 +296,6 @@ subprojects {
                         modRuntimeOnly files({ patchEmiForgeMixinConfig(project) })
                     } else if (recipe_viewer == "emi") {
                         runtimeOnly "dev.emi:emi-${project.name}:${emi_version}"
-                    }
-                }
-                if (jei_available && recipe_viewer == "jei") {
-                    runtimeOnly "mezz.jei:jei-${minecraft_version}-${project.name}:${jei_version}"
-                }
-                if (rei_available) {
-                    compileOnlyApi "me.shedaniel:RoughlyEnoughItems-api-${project.name}:${rei_version}"
-
-                    if (recipe_viewer == "rei") {
-                        runtimeOnly "me.shedaniel:RoughlyEnoughItems-${project.name}:${rei_version}"
-
-                        if (project.name == "forge") {
-                            runtimeOnly "me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}"
-                            runtimeOnly "dev.architectury:architectury-forge:${architectury_version}"
-                        }
                     }
                 }
             }
@@ -361,8 +330,8 @@ subprojects {
             }
 
             // strip a disabled viewer's entrypoint: its class isn't shadowed in, so Fabric can't find it either
-            def entrypointKeys = ["emi": "emi", "jei": "jei_mod_plugin", "rei": "rei_client"]
-            def viewerAvailability = ["emi": emi_available, "jei": jei_available, "rei": rei_available]
+            def entrypointKeys = ["emi": "emi"] // синк/порт 26.1.2: jei/rei entrypoints удалены
+            def viewerAvailability = ["emi": emi_available]
 
             inputs.property("viewerAvailability", viewerAvailability)
 
@@ -444,32 +413,11 @@ allprojects {
             name = "EMI"
             url = "https://maven.terraformersmc.com/"
         }
-        maven {
-            name = "JEI"
-            url "https://maven.blamejared.com"
-        }
-        maven {
-            name = "REI"
-            url "https://maven.shedaniel.me"
-        }
+        // синк/порт 26.1.2: репозитории blamejared и shedaniel удалены — политика EMI-only
         maven {
             url "https://www.cursemaven.com"
             content {
                 includeGroup "curse.maven"
-            }
-        }
-        maven { // KubeJS
-            // Shedaniel's maven (Architectury API)
-            url = "https://maven.architectury.dev"
-            content {
-                includeGroup "dev.architectury"
-            }
-        }
-        maven { // KubeJS
-            // saps.dev Maven (KubeJS and Rhino)
-            url = "https://maven.saps.dev/minecraft"
-            content {
-                includeGroup "dev.latvian.mods"
             }
         }
         maven {
@@ -573,7 +521,7 @@ modpackPlatforms.each { platform ->
             description: "Writes an IntelliJ Python run configuration that builds the ${platform} ALICompat modpack",
             name       : modpackRunConfigName(platform),
             script     : "scripts/modpack.py",
-            parameters : ["--loader=${platform}", "--viewer=rei"].join(" "),
+            parameters : ["--loader=${platform}", "--viewer=emi"].join(" "),
             file       : file(".idea/runConfigurations/Modpack_${platform.capitalize()}.xml"),
     ]
 }

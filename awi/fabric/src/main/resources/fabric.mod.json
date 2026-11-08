@@ -30,12 +30,6 @@
         ],
         "emi": [
             "com.yanny.awi.emi.compatibility.EmiCompatibility"
-        ],
-        "jei_mod_plugin": [
-            "com.yanny.awi.jei.compatibility.JeiCompatibility"
-        ],
-        "rei_client": [
-            "com.yanny.awi.rei.compatibility.ReiCompatibility"
         ]
     },
     "mixins": [
@@ -50,9 +44,7 @@
         "aci": "${aci_version_range_fabric}"
     },
     "suggests": {
-        "emi": "${emi_version_range_fabric}",
-        "jei": "${jei_version_range_fabric}",
-        "rei": "${rei_version_range_fabric}"
+        "emi": "${emi_version_range_fabric}"
     }
 }
   

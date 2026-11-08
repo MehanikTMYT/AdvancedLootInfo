@@ -422,7 +422,7 @@ def write_zip(output: Path, manifest: dict, modlist: str, jars):
 def main():
     parser = argparse.ArgumentParser(description="Builds a Prism-importable modpack of the ALICompat target mods.")
     parser.add_argument("--loader", required=True, choices=sorted(MOD_LOADER_TYPE), help="Mod loader to build the pack for")
-    parser.add_argument("--viewer", default="rei", choices=sorted(VIEWER_SLUGS), help="Recipe viewer to include (default: rei)")
+    parser.add_argument("--viewer", default="emi", choices=sorted(VIEWER_SLUGS), help="Recipe viewer to include (default: emi)")
     parser.add_argument("--output", help="Output zip path (default: build/modpack/<name>-<loader>-<mc>.zip)")
     parser.add_argument("--curseforge-api-key", help="CurseForge API Key (default: $CURSEFORGE_API_KEY)")
     args = parser.parse_args()

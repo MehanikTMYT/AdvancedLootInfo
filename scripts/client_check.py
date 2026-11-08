@@ -15,7 +15,7 @@ from collections import deque
 from pathlib import Path
 
 MODS = ["ali", "awi"]
-VIEWERS = ["emi", "jei", "rei"]
+VIEWERS = ["emi"]  # синк/порт 26.1.2: jei/rei удалены — политика EMI-only
 WORLD = "New World"
 SEPARATOR = "=" * 100
 
